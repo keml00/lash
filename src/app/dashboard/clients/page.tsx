@@ -26,6 +26,8 @@ import {
   MessageSquare,
   TrendingUp,
 } from "lucide-react"
+import { NewClientModal } from "@/components/modals/new-client-modal"
+import { FilterModal } from "@/components/modals/filter-modal"
 
 const clients = [
   {
@@ -138,6 +140,8 @@ const tagColors: Record<string, string> = {
 export default function ClientsPage() {
   const [selectedClient, setSelectedClient] = useState<string | null>(null)
   const [search, setSearch] = useState("")
+  const [showNewClient, setShowNewClient] = useState(false)
+  const [showFilter, setShowFilter] = useState(false)
 
   const filteredClients = clients.filter(
     (c) =>
@@ -342,16 +346,19 @@ export default function ClientsPage() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-1.5">
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setShowFilter(true)}>
               <Filter className="w-4 h-4" />
               Фильтр
             </Button>
-            <Button size="sm" className="gap-1.5 shadow-lg shadow-primary/25">
+            <Button size="sm" className="gap-1.5 shadow-lg shadow-primary/25" onClick={() => setShowNewClient(true)}>
               <Plus className="w-4 h-4" />
               Новый клиент
             </Button>
           </div>
         </div>
+
+        <NewClientModal open={showNewClient} onOpenChange={setShowNewClient} />
+        <FilterModal open={showFilter} onOpenChange={setShowFilter} type="clients" />
 
         {/* Client Cards Grid */}
         <motion.div

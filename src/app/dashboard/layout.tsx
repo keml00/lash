@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Sidebar } from "@/components/layout/sidebar"
+import { ToastProvider } from "@/components/ui/toast"
 
 export default function DashboardLayout({
   children,
@@ -9,11 +10,13 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <main className="lg:pl-[260px] transition-all duration-300">
-        {children}
-      </main>
-    </div>
+    <ToastProvider>
+      <div className="min-h-screen bg-background">
+        <Sidebar />
+        <main className="lg:pl-[260px] transition-all duration-300">
+          {children}
+        </main>
+      </div>
+    </ToastProvider>
   )
 }

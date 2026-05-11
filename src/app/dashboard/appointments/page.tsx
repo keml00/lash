@@ -19,6 +19,8 @@ import {
   MoreVertical,
   Filter,
 } from "lucide-react"
+import { NewAppointmentModal } from "@/components/modals/new-appointment-modal"
+import { FilterModal } from "@/components/modals/filter-modal"
 
 // Mock data for appointments
 const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
@@ -58,6 +60,8 @@ const statusConfig: Record<string, { label: string; variant: "success" | "warnin
 
 export default function AppointmentsPage() {
   const [view, setView] = useState("calendar")
+  const [showNewAppointment, setShowNewAppointment] = useState(false)
+  const [showFilter, setShowFilter] = useState(false)
 
   return (
     <>
@@ -80,16 +84,19 @@ export default function AppointmentsPage() {
           </Tabs>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-1.5">
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setShowFilter(true)}>
               <Filter className="w-4 h-4" />
               Фильтр
             </Button>
-            <Button size="sm" className="gap-1.5 shadow-lg shadow-primary/25">
+            <Button size="sm" className="gap-1.5 shadow-lg shadow-primary/25" onClick={() => setShowNewAppointment(true)}>
               <Plus className="w-4 h-4" />
               Новая запись
             </Button>
           </div>
         </div>
+
+        <NewAppointmentModal open={showNewAppointment} onOpenChange={setShowNewAppointment} />
+        <FilterModal open={showFilter} onOpenChange={setShowFilter} type="appointments" />
 
         {/* Calendar View */}
         {view === "calendar" && (
