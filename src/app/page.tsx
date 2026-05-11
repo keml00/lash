@@ -200,7 +200,7 @@ export default function LandingPage() {
               <Link href="/dashboard">Войти</Link>
             </Button>
             <Button size="sm" className="shadow-lg shadow-primary/25" asChild>
-              <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">Получить доступ</a>
+              <Link href="/dashboard">Получить доступ</Link>
             </Button>
           </div>
         </div>
@@ -241,10 +241,10 @@ export default function LandingPage() {
 
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30" asChild>
-              <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
+              <Link href="/dashboard">
                 Получить демо-доступ
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </a>
+              </Link>
             </Button>
             <Button size="lg" variant="outline" className="text-base px-8" asChild>
               <a href="#pricing">
@@ -377,10 +377,10 @@ export default function LandingPage() {
                 </div>
               </div>
               <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30 shrink-0" asChild>
-                <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
-                  Написать в Telegram
+                <Link href="/dashboard">
+                  Открыть панель
                   <ArrowRight className="w-4 h-4 ml-2" />
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -442,12 +442,12 @@ export default function LandingPage() {
                   variant={plan.popular ? "default" : "outline"}
                   asChild
                 >
-                  <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
-                    Получить доступ
-                  </a>
+                  <Link href="/dashboard">
+                    Попробовать
+                  </Link>
                 </Button>
                 <p className="text-[11px] text-center text-muted-foreground mt-2">
-                  Напишите в Telegram для подключения
+                  Демо-доступ • Напишите @keml00
                 </p>
               </div>
             ))}
