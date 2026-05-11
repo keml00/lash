@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Header } from "@/components/layout/header"
 import { Card, CardContent } from "@/components/ui/card"
@@ -28,99 +28,7 @@ import {
 } from "lucide-react"
 import { NewClientModal } from "@/components/modals/new-client-modal"
 import { FilterModal } from "@/components/modals/filter-modal"
-
-const clients = [
-  {
-    id: "1",
-    firstName: "Елена",
-    lastName: "Смирнова",
-    phone: "+7 (999) 123-45-67",
-    email: "elena@mail.ru",
-    visits: 24,
-    totalSpent: 156000,
-    avgCheck: 6500,
-    lastVisit: "2 дня назад",
-    bonusPoints: 3200,
-    discount: 10,
-    tags: ["VIP", "Постоянный"],
-    source: "Instagram",
-  },
-  {
-    id: "2",
-    firstName: "Мария",
-    lastName: "Иванова",
-    phone: "+7 (925) 987-65-43",
-    email: "maria.i@gmail.com",
-    visits: 12,
-    totalSpent: 48000,
-    avgCheck: 4000,
-    lastVisit: "5 дней назад",
-    bonusPoints: 1200,
-    discount: 5,
-    tags: ["Постоянный"],
-    source: "Рекомендация",
-  },
-  {
-    id: "3",
-    firstName: "Анастасия",
-    lastName: "Козлова",
-    phone: "+7 (916) 555-33-22",
-    email: "nastya.k@yandex.ru",
-    visits: 8,
-    totalSpent: 32000,
-    avgCheck: 4000,
-    lastVisit: "1 неделю назад",
-    bonusPoints: 800,
-    discount: 0,
-    tags: ["Новый"],
-    source: "Telegram",
-  },
-  {
-    id: "4",
-    firstName: "Ирина",
-    lastName: "Волкова",
-    phone: "+7 (903) 222-11-00",
-    email: "irina.v@mail.ru",
-    visits: 36,
-    totalSpent: 234000,
-    avgCheck: 6500,
-    lastVisit: "Вчера",
-    bonusPoints: 5600,
-    discount: 15,
-    tags: ["VIP", "Постоянный", "Бонус"],
-    source: "Сайт",
-  },
-  {
-    id: "5",
-    firstName: "Татьяна",
-    lastName: "Морозова",
-    phone: "+7 (977) 444-55-66",
-    email: "tanya.m@gmail.com",
-    visits: 6,
-    totalSpent: 18000,
-    avgCheck: 3000,
-    lastVisit: "2 недели назад",
-    bonusPoints: 400,
-    discount: 0,
-    tags: [],
-    source: "QR код",
-  },
-  {
-    id: "6",
-    firstName: "Светлана",
-    lastName: "Петрова",
-    phone: "+7 (926) 777-88-99",
-    email: "sveta.p@mail.ru",
-    visits: 18,
-    totalSpent: 86400,
-    avgCheck: 4800,
-    lastVisit: "3 дня назад",
-    bonusPoints: 2100,
-    discount: 7,
-    tags: ["Постоянный"],
-    source: "Instagram",
-  },
-]
+import { useStore } from "@/lib/store"
 
 const clientHistory = [
   { date: "10 мая 2025", service: "Окрашивание волос", master: "Анна М.", price: "6 500 ₽", rating: 5 },
@@ -142,12 +50,17 @@ export default function ClientsPage() {
   const [search, setSearch] = useState("")
   const [showNewClient, setShowNewClient] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
+  const { clients, clientFilter } = useStore()
 
-  const filteredClients = clients.filter(
-    (c) =>
-      `${c.firstName} ${c.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
-      c.phone.includes(search)
-  )
+  const filteredClients = useMemo(() => {
+    return clients.filter((c) => {
+      const matchesSearch = `${c.firstName} ${c.lastName}`.toLowerCase().includes(search.toLowerCase()) || c.phone.includes(search)
+      if (!matchesSearch) return false
+      if (clientFilter.visitsFrom > 0 && c.visits < clientFilter.visitsFrom) return false
+      if (clientFilter.visitsTo < 999 && c.visits > clientFilter.visitsTo) return false
+      return true
+    })
+  }, [clients, search, clientFilter])
 
   const activeClient = clients.find((c) => c.id === selectedClient)
 

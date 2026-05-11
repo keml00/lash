@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { useToast } from "@/components/ui/toast"
-import { Badge } from "@/components/ui/badge"
+import { useStore } from "@/lib/store"
 
 const statusOptions = [
   { value: "", label: "Все статусы" },
@@ -43,13 +43,31 @@ interface Props {
 
 export function FilterModal({ open, onOpenChange, type = "appointments" }: Props) {
   const { showToast } = useToast()
+  const { appFilter, setAppFilter, clientFilter, setClientFilter } = useStore()
+
+  const [localAppFilter, setLocalAppFilter] = useState(appFilter)
+  const [localClientFilter, setLocalClientFilter] = useState(clientFilter)
 
   const handleApply = () => {
+    if (type === "appointments") {
+      setAppFilter(localAppFilter)
+    } else if (type === "clients") {
+      setClientFilter(localClientFilter)
+    }
     onOpenChange(false)
     showToast("Фильтры применены", "info")
   }
 
   const handleReset = () => {
+    if (type === "appointments") {
+      const empty = { status: "", master: "", service: "", dateFrom: "", dateTo: "" }
+      setLocalAppFilter(empty)
+      setAppFilter(empty)
+    } else if (type === "clients") {
+      const empty = { tags: [], visitsFrom: 0, visitsTo: 999, lastVisitFrom: "", lastVisitTo: "" }
+      setLocalClientFilter(empty)
+      setClientFilter(empty)
+    }
     onOpenChange(false)
     showToast("Фильтры сброшены", "info")
   }
@@ -64,17 +82,40 @@ export function FilterModal({ open, onOpenChange, type = "appointments" }: Props
       <DialogContent className="space-y-4">
         {type === "appointments" && (
           <>
-            <Select label="Статус" options={statusOptions} placeholder="Все статусы" />
-            <Select label="Мастер" options={masterOptions} placeholder="Все мастера" />
-            <Select label="Услуга" options={serviceOptions} placeholder="Все услуги" />
+            <Select
+              label="Статус"
+              options={statusOptions}
+              value={localAppFilter.status}
+              onChange={(e) => setLocalAppFilter({ ...localAppFilter, status: e.target.value })}
+            />
+            <Select
+              label="Мастер"
+              options={masterOptions}
+              value={localAppFilter.master}
+              onChange={(e) => setLocalAppFilter({ ...localAppFilter, master: e.target.value })}
+            />
+            <Select
+              label="Услуга"
+              options={serviceOptions}
+              value={localAppFilter.service}
+              onChange={(e) => setLocalAppFilter({ ...localAppFilter, service: e.target.value })}
+            />
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Дата от</label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  value={localAppFilter.dateFrom}
+                  onChange={(e) => setLocalAppFilter({ ...localAppFilter, dateFrom: e.target.value })}
+                />
               </div>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Дата до</label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  value={localAppFilter.dateTo}
+                  onChange={(e) => setLocalAppFilter({ ...localAppFilter, dateTo: e.target.value })}
+                />
               </div>
             </div>
           </>
@@ -82,78 +123,26 @@ export function FilterModal({ open, onOpenChange, type = "appointments" }: Props
 
         {type === "clients" && (
           <>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Теги</label>
-              <div className="flex flex-wrap gap-2">
-                {["VIP", "Постоянный", "Новый", "Бонус"].map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="outline"
-                    className="cursor-pointer hover:bg-primary/10 hover:border-primary transition-colors px-3 py-1"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Визитов от</label>
-                <Input type="number" placeholder="0" />
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={localClientFilter.visitsFrom || ""}
+                  onChange={(e) => setLocalClientFilter({ ...localClientFilter, visitsFrom: parseInt(e.target.value) || 0 })}
+                />
               </div>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Визитов до</label>
-                <Input type="number" placeholder="100" />
+                <Input
+                  type="number"
+                  placeholder="999"
+                  value={localClientFilter.visitsTo === 999 ? "" : localClientFilter.visitsTo}
+                  onChange={(e) => setLocalClientFilter({ ...localClientFilter, visitsTo: parseInt(e.target.value) || 999 })}
+                />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Последний визит от</label>
-                <Input type="date" />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium">Последний визит до</label>
-                <Input type="date" />
-              </div>
-            </div>
-          </>
-        )}
-
-        {type === "materials" && (
-          <>
-            <Select
-              label="Статус"
-              options={[
-                { value: "", label: "Все" },
-                { value: "ok", label: "В наличии" },
-                { value: "low", label: "Мало" },
-                { value: "critical", label: "Заканчивается" },
-              ]}
-              placeholder="Все"
-            />
-            <Select
-              label="Категория"
-              options={[
-                { value: "", label: "Все категории" },
-                { value: "paints", label: "Краски" },
-                { value: "nails", label: "Гель-лаки" },
-                { value: "care", label: "Уход" },
-                { value: "consumables", label: "Расходники" },
-                { value: "lashes", label: "Ресницы" },
-              ]}
-              placeholder="Все категории"
-            />
-            <Select
-              label="Поставщик"
-              options={[
-                { value: "", label: "Все поставщики" },
-                { value: "beauty-supply", label: "Beauty Supply Co." },
-                { value: "premium-hair", label: "Premium Hair" },
-                { value: "nail-pro", label: "Nail Pro" },
-                { value: "lash-store", label: "Lash Store" },
-              ]}
-              placeholder="Все поставщики"
-            />
           </>
         )}
       </DialogContent>
