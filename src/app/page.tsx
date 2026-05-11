@@ -200,7 +200,7 @@ export default function LandingPage() {
               <Link href="/dashboard">Войти</Link>
             </Button>
             <Button size="sm" className="shadow-lg shadow-primary/25" asChild>
-              <Link href="/dashboard">Демо-доступ</Link>
+              <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">Получить доступ</a>
             </Button>
           </div>
         </div>
@@ -241,10 +241,10 @@ export default function LandingPage() {
 
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30" asChild>
-              <Link href="/dashboard">
-                Открыть демо бесплатно
+              <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
+                Получить демо-доступ
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              </a>
             </Button>
             <Button size="lg" variant="outline" className="text-base px-8" asChild>
               <a href="#pricing">
@@ -255,13 +255,13 @@ export default function LandingPage() {
 
           <motion.div variants={fadeInUp} className="mt-8 flex items-center justify-center gap-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-500" /> Без регистрации
+              <Check className="w-4 h-4 text-emerald-500" /> Напишите в Telegram
             </span>
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-500" /> Без карты
+              <Check className="w-4 h-4 text-emerald-500" /> Персональная настройка
             </span>
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-500" /> Полный доступ к демо
+              <Check className="w-4 h-4 text-emerald-500" /> Полный доступ ко всем функциям
             </span>
           </motion.div>
         </motion.div>
@@ -361,29 +361,26 @@ export default function LandingPage() {
               <div>
                 <Badge variant="secondary" className="mb-3 px-3 py-1">
                   <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Бесплатный демо-доступ
+                  Демо-доступ по запросу
                 </Badge>
-                <h3 className="text-2xl font-bold mb-2">Посмотрите как работает Glamify</h3>
+                <h3 className="text-2xl font-bold mb-2">Хотите посмотреть систему изнутри?</h3>
                 <p className="text-muted-foreground max-w-md">
-                  Откройте демо-версию CRM прямо сейчас — без регистрации. Все функции доступны: записи, клиенты, финансы, AI-ассистент.
+                  Напишите нам в Telegram — мы откроем вам персональный демо-доступ, проведём экскурсию по системе и ответим на все вопросы.
                 </p>
                 <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    <Check className="w-4 h-4 text-emerald-500" /> Без регистрации
+                    <Check className="w-4 h-4 text-emerald-500" /> Персональная демонстрация
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Check className="w-4 h-4 text-emerald-500" /> Все разделы
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="w-4 h-4 text-emerald-500" /> Реальные данные
+                    <Check className="w-4 h-4 text-emerald-500" /> Ответы на вопросы
                   </span>
                 </div>
               </div>
               <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30 shrink-0" asChild>
-                <Link href="/dashboard">
-                  Открыть демо
+                <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
+                  Написать в Telegram
                   <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
@@ -445,12 +442,12 @@ export default function LandingPage() {
                   variant={plan.popular ? "default" : "outline"}
                   asChild
                 >
-                  <Link href="/dashboard">
-                    Попробовать бесплатно
-                  </Link>
+                  <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
+                    Получить доступ
+                  </a>
                 </Button>
                 <p className="text-[11px] text-center text-muted-foreground mt-2">
-                  14 дней бесплатно • Без карты
+                  Напишите в Telegram для подключения
                 </p>
               </div>
             ))}
@@ -509,10 +506,10 @@ export default function LandingPage() {
                 Присоединяйтесь к 2500+ салонам, которые уже используют Glamify для роста бизнеса
               </p>
               <Button size="lg" variant="secondary" className="text-base px-8 bg-white text-violet-700 hover:bg-white/90" asChild>
-                <Link href="/dashboard">
-                  Начать 14-дневный триал
+                <a href="https://t.me/keml00" target="_blank" rel="noopener noreferrer">
+                  Написать в Telegram
                   <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
