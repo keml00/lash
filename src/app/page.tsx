@@ -95,52 +95,55 @@ const features = [
 
 const plans = [
   {
-    name: "Basic",
+    name: "Старт",
     price: "990",
     period: "мес",
     description: "Для индивидуальных мастеров",
     features: [
       "1 мастер",
-      "До 100 клиентов",
-      "Онлайн запись",
-      "SMS напоминания",
+      "До 150 клиентов",
+      "Онлайн запись 24/7",
+      "SMS + Telegram напоминания",
       "Базовая аналитика",
-      "Мобильное приложение",
+      "Мобильная версия",
+      "Техподдержка в чате",
     ],
     popular: false,
   },
   {
-    name: "Pro",
+    name: "Салон",
     price: "2 490",
     period: "мес",
-    description: "Для небольших салонов",
+    description: "Для салонов до 5 мастеров",
     features: [
       "До 5 мастеров",
       "Безлимит клиентов",
       "AI ассистент",
       "Telegram + WhatsApp",
-      "Учёт материалов",
+      "Учёт материалов и склад",
       "Финансовая аналитика",
       "QR запись",
       "Бонусная система",
+      "Зарплатный модуль",
     ],
     popular: true,
   },
   {
-    name: "Business",
+    name: "Сеть",
     price: "5 990",
     period: "мес",
-    description: "Для сети салонов",
+    description: "Для сети салонов и студий",
     features: [
       "Безлимит мастеров",
       "Несколько филиалов",
       "Все AI функции",
       "API интеграции",
       "Белый лейбл",
-      "Приоритетная поддержка",
+      "Приоритетная поддержка 24/7",
       "Кастомные отчёты",
       "Реферальная система",
       "Обучение команды",
+      "Персональный менеджер",
     ],
     popular: false,
   },
@@ -197,7 +200,7 @@ export default function LandingPage() {
               <Link href="/dashboard">Войти</Link>
             </Button>
             <Button size="sm" className="shadow-lg shadow-primary/25" asChild>
-              <Link href="/dashboard">Начать бесплатно</Link>
+              <Link href="/dashboard">Демо-доступ</Link>
             </Button>
           </div>
         </div>
@@ -239,24 +242,26 @@ export default function LandingPage() {
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30" asChild>
               <Link href="/dashboard">
-                Попробовать бесплатно
+                Открыть демо бесплатно
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8">
-              Смотреть демо
+            <Button size="lg" variant="outline" className="text-base px-8" asChild>
+              <a href="#pricing">
+                Посмотреть тарифы
+              </a>
             </Button>
           </motion.div>
 
           <motion.div variants={fadeInUp} className="mt-8 flex items-center justify-center gap-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-500" /> 14 дней бесплатно
+              <Check className="w-4 h-4 text-emerald-500" /> Без регистрации
             </span>
             <span className="flex items-center gap-1.5">
               <Check className="w-4 h-4 text-emerald-500" /> Без карты
             </span>
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-500" /> Настройка за 5 минут
+              <Check className="w-4 h-4 text-emerald-500" /> Полный доступ к демо
             </span>
           </motion.div>
         </motion.div>
@@ -347,6 +352,44 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Demo Access Banner */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="relative p-8 sm:p-10 rounded-2xl border border-primary/20 bg-gradient-to-r from-violet-50 via-white to-indigo-50 shadow-lg overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <Badge variant="secondary" className="mb-3 px-3 py-1">
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                  Бесплатный демо-доступ
+                </Badge>
+                <h3 className="text-2xl font-bold mb-2">Посмотрите как работает Glamify</h3>
+                <p className="text-muted-foreground max-w-md">
+                  Откройте демо-версию CRM прямо сейчас — без регистрации. Все функции доступны: записи, клиенты, финансы, AI-ассистент.
+                </p>
+                <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-500" /> Без регистрации
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-500" /> Все разделы
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-500" /> Реальные данные
+                  </span>
+                </div>
+              </div>
+              <Button size="lg" className="text-base px-8 shadow-xl shadow-primary/30 shrink-0" asChild>
+                <Link href="/dashboard">
+                  Открыть демо
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-muted/30">
         <div className="max-w-7xl mx-auto">
@@ -403,9 +446,12 @@ export default function LandingPage() {
                   asChild
                 >
                   <Link href="/dashboard">
-                    Начать бесплатно
+                    Попробовать бесплатно
                   </Link>
                 </Button>
+                <p className="text-[11px] text-center text-muted-foreground mt-2">
+                  14 дней бесплатно • Без карты
+                </p>
               </div>
             ))}
           </div>
