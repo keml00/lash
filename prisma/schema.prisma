@@ -1,0 +1,317 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Salon {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  phone       String?
+  email       String?
+  address     String?
+  city        String?
+  timezone    String   @default("Europe/Moscow")
+  currency    String   @default("RUB")
+  plan        Plan     @default(TRIAL)
+  planExpiry  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  staff       Staff[]
+  services    Service[]
+  clients     Client[]
+  appointments Appointment[]
+  materials   Material[]
+  transactions Transaction[]
+  branches    Branch[]
+  notifications NotificationTemplate[]
+}
+
+model Branch {
+  id        String   @id @default(cuid())
+  salonId   String
+  name      String
+  address   String?
+  phone     String?
+  isMain    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  salon     Salon    @relation(fields: [salonId], references: [id])
+  staff     Staff[]
+  appointments Appointment[]
+}
+
+model Staff {
+  id          String   @id @default(cuid())
+  salonId     String
+  branchId    String?
+  email       String   @unique
+  password    String
+  firstName   String
+  lastName    String
+  phone       String?
+  avatar      String?
+  role        Role     @default(MASTER)
+  specialization String?
+  commission  Float    @default(0)
+  salary      Float    @default(0)
+  isActive    Boolean  @default(true)
+  workSchedule Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  salon       Salon    @relation(fields: [salonId], references: [id])
+  branch      Branch?  @relation(fields: [branchId], references: [id])
+  services    ServiceStaff[]
+  appointments Appointment[]
+  notes       StaffNote[]
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  salonId     String
+  categoryId  String?
+  name        String
+  description String?
+  duration    Int      // minutes
+  price       Float
+  color       String   @default("#6366f1")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  salon       Salon    @relation(fields: [salonId], references: [id])
+  category    ServiceCategory? @relation(fields: [categoryId], references: [id])
+  staff       ServiceStaff[]
+  appointments Appointment[]
+  materials   ServiceMaterial[]
+}
+
+model ServiceCategory {
+  id       String    @id @default(cuid())
+  name     String
+  icon     String?
+  services Service[]
+}
+
+model ServiceStaff {
+  id        String  @id @default(cuid())
+  serviceId String
+  staffId   String
+  price     Float?  // override price
+
+  service   Service @relation(fields: [serviceId], references: [id])
+  staff     Staff   @relation(fields: [staffId], references: [id])
+
+  @@unique([serviceId, staffId])
+}
+
+model Client {
+  id            String   @id @default(cuid())
+  salonId       String
+  firstName     String
+  lastName      String?
+  phone         String
+  email         String?
+  birthDate     DateTime?
+  gender        Gender?
+  avatar        String?
+  source        String?
+  notes         String?
+  bonusPoints   Int      @default(0)
+  discount      Float    @default(0)
+  totalSpent    Float    @default(0)
+  visitCount    Int      @default(0)
+  lastVisit     DateTime?
+  tags          String[]
+  preferences   Json?
+  telegramId    String?
+  whatsappId    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  salon         Salon    @relation(fields: [salonId], references: [id])
+  appointments  Appointment[]
+  photos        ClientPhoto[]
+}
+
+model ClientPhoto {
+  id        String   @id @default(cuid())
+  clientId  String
+  url       String
+  caption   String?
+  createdAt DateTime @default(now())
+
+  client    Client   @relation(fields: [clientId], references: [id])
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  salonId     String
+  branchId    String?
+  clientId    String
+  staffId     String
+  serviceId   String
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(PENDING)
+  price       Float
+  discount    Float             @default(0)
+  finalPrice  Float
+  notes       String?
+  rating      Int?
+  review      String?
+  cancelReason String?
+  reminders   Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  salon       Salon    @relation(fields: [salonId], references: [id])
+  branch      Branch?  @relation(fields: [branchId], references: [id])
+  client      Client   @relation(fields: [clientId], references: [id])
+  staff       Staff    @relation(fields: [staffId], references: [id])
+  service     Service  @relation(fields: [serviceId], references: [id])
+  materialsUsed MaterialUsage[]
+  transaction Transaction?
+}
+
+model Material {
+  id            String   @id @default(cuid())
+  salonId       String
+  name          String
+  brand         String?
+  unit          String   @default("шт")
+  quantity      Float    @default(0)
+  minQuantity   Float    @default(5)
+  costPrice     Float    @default(0)
+  supplier      String?
+  supplierPhone String?
+  barcode       String?
+  expiryDate    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  salon         Salon    @relation(fields: [salonId], references: [id])
+  services      ServiceMaterial[]
+  usages        MaterialUsage[]
+}
+
+model ServiceMaterial {
+  id          String   @id @default(cuid())
+  serviceId   String
+  materialId  String
+  quantity    Float    @default(1)
+
+  service     Service  @relation(fields: [serviceId], references: [id])
+  material    Material @relation(fields: [materialId], references: [id])
+
+  @@unique([serviceId, materialId])
+}
+
+model MaterialUsage {
+  id            String      @id @default(cuid())
+  materialId    String
+  appointmentId String
+  quantity      Float
+  createdAt     DateTime    @default(now())
+
+  material      Material    @relation(fields: [materialId], references: [id])
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model Transaction {
+  id            String          @id @default(cuid())
+  salonId       String
+  appointmentId String?         @unique
+  type          TransactionType
+  category      String?
+  amount        Float
+  description   String?
+  date          DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+
+  salon         Salon       @relation(fields: [salonId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+}
+
+model NotificationTemplate {
+  id        String           @id @default(cuid())
+  salonId   String
+  type      NotificationType
+  channel   NotificationChannel
+  subject   String?
+  body      String
+  isActive  Boolean          @default(true)
+  createdAt DateTime         @default(now())
+
+  salon     Salon @relation(fields: [salonId], references: [id])
+}
+
+model StaffNote {
+  id        String   @id @default(cuid())
+  staffId   String
+  content   String
+  createdAt DateTime @default(now())
+
+  staff     Staff @relation(fields: [staffId], references: [id])
+}
+
+enum Plan {
+  TRIAL
+  BASIC
+  PRO
+  BUSINESS
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MASTER
+  RECEPTIONIST
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum NotificationType {
+  REMINDER_24H
+  REMINDER_2H
+  CONFIRMATION
+  CANCELLATION
+  AFTER_VISIT
+  BIRTHDAY
+  PROMOTION
+}
+
+enum NotificationChannel {
+  SMS
+  TELEGRAM
+  WHATSAPP
+  EMAIL
+  PUSH
+}
